@@ -16,52 +16,40 @@ const razorpayInstance = new Razorpay({
 
 // Route to create an order
 //aa
+
+// Create order route
 router.post("/createOrder", async (req, res) => {
   const { orderItems } = req.body;
-
-  // Initialize the total amount
   let totalAmount = 0;
 
   try {
-    // Fetch product details for each order item and calculate the total amount
-    const updatedOrderItems = await Promise.all(orderItems.map(async (item) => {
-      const product = await productService.getProductById(item.product);
+      // Iterate over orderItems to get the price of each product
+      for (const item of orderItems) {
+          const product = await productService.getProductById(item.productId);
+          // Calculate total price (you can adjust based on quantity or other factors)
+          totalAmount += (product.price - (product.price * (item.discountPercent / 100))) * item.quantity;
+      }
 
-      // Use the price from the product object (product.price or discountedPrice)
-      const price = product.discountedPrice || product.price; // Use discounted price if available
+      // Convert totalAmount to smallest currency unit (paise for INR)
+      const amount = totalAmount * 100; // Assuming the price is in INR, multiply by 100 to convert to paise
+      const currency = "INR"; // Currency for the payment
+      const receipt = `receipt_${new Date().getTime()}`; // Example receipt ID (customize as needed)
 
-      // Update the item with the fetched product price
-      item.price = price;
+      const options = {
+          amount, // Amount in paise
+          currency,
+          receipt,
+          offers: ["offer_PHxDNFUy0hDWo3"] // Example offer (customize as needed)
+      };
 
-      // Add to the total amount
-      totalAmount += price * item.quantity;
-
-      return item;
-    }));
-
-    // Options for Razorpay payment
-    const options = {
-      amount: totalAmount * 100, // Amount in smallest currency unit (paise for INR)
-      currency: 'INR',
-      receipt: `order_rcptid_${Date.now()}`,
-      offers: [
-        "offer_PHxDNFUy0hDWo3"
-      ]
-    };
-
-    // Create the order using Razorpay API
-    const order = await razorpayInstance.orders.create(options);
-
-    // Return the order ID
-    res.json({ orderId: order.id, orderItems: updatedOrderItems });
-
+      // Create the Razorpay order
+      const order = await razorpayInstance.orders.create(options);
+      res.json({ orderId: order.id });
   } catch (error) {
-    console.error("Error creating order:", error.message);
-    res.status(500).json({ error: error.message });
+      console.error("Error creating order:", error.message);
+      res.status(500).json({ error: error.message });
   }
 });
-
-
 // Function to get the current date and time formatted
 function getCurrentDateTime() {
   const currentDate = new Date();
