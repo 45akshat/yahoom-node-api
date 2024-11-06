@@ -24,7 +24,14 @@ router.post('/get-updates', async (req, res) => {
     // Example usage
 
     if(req.body.order_id == 'dummpy shiprocket order id 123'){
-       return res.status(200).send({'mobile':'9022559233', 'awb': req.body.awb, 'order_id': req.body.order_id, 'shipment_status': req.body.shipment_status});
+        let parameters = [
+            { name: "name", value:  "Aksh test"},
+            { name: "order_number", value: req.body.order_id },
+            { name: "id", value: req.body.order_id }
+            ];
+        
+        await sendTemplateMessage('9022559233', 'order_arrived_3', 'order_arrived_3', parameters);
+       return res.status(200).send({'mobile':'9022559233', 'awb': req.body.order_id, 'order_id': req.body.order_id, 'shipment_status': req.body.shipment_status});
 
     }
 
