@@ -24,6 +24,7 @@ router.post("/createOrder", async (req, res) => {
 
   try {
       // Iterate over orderItems to get the price of each product
+      console.log(orderItems)
       for (const item of orderItems) {
           const product = await productService.getProductById(item.productId);
           // Calculate total price (you can adjust based on quantity or other factors)
