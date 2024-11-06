@@ -6,7 +6,7 @@ const register = async (req, res) => {
     try {
         const user = await userService.createUser(req.body);
         const jwt = jwtProvider.generateToken(user._id);
-        //console.log(jwt);
+       //console.log(jwt);
         await cartService.createCart(user); 
         // Assuming cartService is defined
         return res.status(200).send({ jwt, message: "register success" });
@@ -24,8 +24,8 @@ const requestOtp = async (req, res) => {
         const statusOfOtp = await userService.sendOtp(email, otp)
 
 
-        //console.log("save otp to db")
-        //console.log("send mail otp")
+       //console.log("save otp to db")
+       //console.log("send mail otp")
         return res.status(200).send(statusOfOtp)
     }catch(error){
         console.error(error); // Log the error for debugging

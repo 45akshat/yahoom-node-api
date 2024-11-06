@@ -12,7 +12,7 @@ const createUser = async (userData) => {
         }
 
         const user = await User.create({ firstName, lastName, email, password, mobile });
-        //console.log("Created user: ", user);
+       //console.log("Created user: ", user);
 
         return user;
     } catch (error) {
@@ -48,7 +48,7 @@ const sendOtp = async (email, password) => {
         // If user does not exist, create a new one
         if (!user) {
             user = await User.create({ firstName: "empty", lastName: "empty", email, password, mobile: "empty" });
-            //console.log(`New user created with email: ${email}`);
+           //console.log(`New user created with email: ${email}`);
         }
         // Update the user's password
         user.password = password;

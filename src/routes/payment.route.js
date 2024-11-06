@@ -30,7 +30,7 @@ router.post("/createOrder", async (req, res) => {
     const order = await razorpayInstance.orders.create(options);
     res.json({ orderId: order.id });
   } catch (error) {
-    //console.log(error)
+   //console.log(error)
     res.status(500).json({ error: error.message });
   }
 });
@@ -57,7 +57,7 @@ router.post("/verifyPayment", async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, user, orderItems, shippingAddress, paymentDetails, discount, totalPrice, totalDiscountedPrice } = req.body;
 
   // Validate payment
-  const paymentStatusFromRZP = await validatePaymentVerification({ order_id: razorpay_order_id, payment_id: razorpay_payment_id }, razorpay_signature, 'b7g5y5ZRAcl3gGacsoDvgIwX');
+  const paymentStatusFromRZP = await validatePaymentVerification({ order_id: razorpay_order_id, payment_id: razorpay_payment_id }, razorpay_signature, 'QyiRITqU6lFdNbrf13QTIKdl');
   if (paymentStatusFromRZP !== true) {
       return res.send({ status: "failure" });
   }
@@ -154,7 +154,7 @@ router.post("/verifyPayment", async (req, res) => {
             // let awb_code = response.awb_code
             // orderService.updateAwb(order_id, awb_code);
             
-            //console.log('Order created successfully on Shiprocket:', response);
+           //console.log('Order created successfully on Shiprocket:', response);
             
             const parameters = [
               { name: "name", value: orderDataFromDb.shippingAddress.firstName },

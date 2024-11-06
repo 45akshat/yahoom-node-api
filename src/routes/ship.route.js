@@ -7,7 +7,7 @@ async function startShiprocketOrder(orderDetails) {
     const url = 'https://apiv2.shiprocket.in/v1/external/orders/create/adhoc';
 
     try {
-        //console.log(orderDetails)
+       //console.log(orderDetails)
         // Attempt to create the order with "1" first
         let response = await axios.post(url, orderDetails, {
             headers: {
@@ -24,7 +24,7 @@ async function startShiprocketOrder(orderDetails) {
             awbResponse = await generateAwb(data.shipment_id, "1", authToken);
         } catch (error) {
             // If generating AWB with "1" fails, retry with "10" directly in the try block
-            //console.log('Retrying AWB generation with attempt "10"');
+           //console.log('Retrying AWB generation with attempt "10"');
             awbResponse = await generateAwb(data.shipment_id, "10", authToken);
         }
         

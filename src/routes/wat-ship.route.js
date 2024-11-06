@@ -7,7 +7,7 @@ const orderService = require('../services/order.service.js');
 // Webhook endpoint to listen for Shiprocket tracking updates
 router.post('/get-updates', async (req, res) => {
     // Log the incoming request for debugging
-    //console.log('Received a webhook event:', req.body);
+   //console.log('Received a webhook event:', req.body);
 
     // Validate the received data
     const { awb, courier_name, current_status, order_id } = req.body;
@@ -37,7 +37,7 @@ router.post('/get-updates', async (req, res) => {
 
 
     const order = await orderService.getOrderById(req.body.order_id)
-    //console.log(order.shippingAddress.mobile)
+   //console.log(order.shippingAddress.mobile)
     if (!order) {
         return res.status(404).send({ error: 'Order not found' });
     }

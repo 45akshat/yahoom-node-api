@@ -19,7 +19,7 @@ const createProduct = async (productData) => {
             imageUrls
         });
 
-        //console.log("Created product: ", product);
+       //console.log("Created product: ", product);
         return product;
     } catch (error) {
         console.error("Error creating product:", error.message);
@@ -36,7 +36,7 @@ const updateProduct = async (productId, updateData) => {
             throw new Error(`Product not found with id: ${productId}`);
         }
 
-        //console.log("Updated product: ", updatedProduct);
+       //console.log("Updated product: ", updatedProduct);
         return updatedProduct;
     } catch (error) {
         console.error("Error updating product:", error.message);
@@ -53,7 +53,7 @@ const deleteProduct = async (productId) => {
             throw new Error(`Product not found with id: ${productId}`);
         }
 
-        //console.log("Deleted product: ", deletedProduct);
+       //console.log("Deleted product: ", deletedProduct);
         return { message: "Product deleted successfully" };
     } catch (error) {
         console.error("Error deleting product:", error.message);
@@ -121,7 +121,7 @@ const getAllProducts = async (query) => {
         const products = await Product.find(filters);
 
         if (!products.length) {
-            //console.log("No products found.");
+           //console.log("No products found.");
         }
 
         return products;
@@ -169,7 +169,7 @@ const reduceProductQuantity = async (productId, size, quantity) => {
             throw new Error(`Product with id: ${productId} and size: ${size} not found or insufficient quantity`);
         }
 
-        //console.log("Reduced product quantity:", product);
+       //console.log("Reduced product quantity:", product);
         return product;
     } catch (error) {
         console.error("Error reducing product quantity:", error.message);
