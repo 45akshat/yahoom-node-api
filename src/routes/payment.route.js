@@ -15,26 +15,51 @@ const razorpayInstance = new Razorpay({
 });
 
 // Route to create an order
+
 router.post("/createOrder", async (req, res) => {
-  const { amount, currency, receipt } = req.body;
-  const options = { 
-    amount: amount, // Amount in smallest currency unit (paise for INR)
-    currency,
-    receipt,
-    "offers": [
-      "offer_PHxDNFUy0hDWo3"
-    ]
-  };
+  const { orderItems } = req.body;
+
+  // Initialize the total amount
+  let totalAmount = 0;
 
   try {
+    // Fetch product details for each order item and calculate the total amount
+    const updatedOrderItems = await Promise.all(orderItems.map(async (item) => {
+      const product = await productService.getProductById(item.product);
+
+      // Use the price from the product object (product.price or discountedPrice)
+      const price = product.discountedPrice || product.price; // Use discounted price if available
+
+      // Update the item with the fetched product price
+      item.price = price;
+
+      // Add to the total amount
+      totalAmount += price * item.quantity;
+
+      return item;
+    }));
+
+    // Options for Razorpay payment
+    const options = {
+      amount: totalAmount * 100, // Amount in smallest currency unit (paise for INR)
+      currency: 'INR',
+      receipt: `order_rcptid_${Date.now()}`,
+      offers: [
+        "offer_PHxDNFUy0hDWo3"
+      ]
+    };
+
+    // Create the order using Razorpay API
     const order = await razorpayInstance.orders.create(options);
-    res.json({ orderId: order.id });
+
+    // Return the order ID
+    res.json({ orderId: order.id, orderItems: updatedOrderItems });
+
   } catch (error) {
-   //console.log(error)
+    console.error("Error creating order:", error.message);
     res.status(500).json({ error: error.message });
   }
 });
-
 
 
 // Function to get the current date and time formatted
@@ -61,6 +86,7 @@ router.post("/verifyPayment", async (req, res) => {
   if (paymentStatusFromRZP !== true) {
       return res.send({ status: "failure" });
   }
+  //aksh
 
   // Adjust total prices for payment processing
   const adjustedTotalPrice = totalPrice / 100;
