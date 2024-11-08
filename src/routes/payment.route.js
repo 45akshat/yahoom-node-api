@@ -28,7 +28,7 @@ router.post("/createOrder", async (req, res) => {
       for (const item of orderItems) {
           const product = await productService.getProductById(item.productId);
           // Calculate total price (you can adjust based on quantity or other factors)
-          totalAmount += (product.price - (product.price * (item.discountPercent / 100))) * item.quantity;
+          totalAmount += product.discountedPrice * item.quantity;
       }
 
       // Convert totalAmount to smallest currency unit (paise for INR)
