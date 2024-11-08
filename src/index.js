@@ -6,10 +6,14 @@
 const express = require("express");
 const cors = require("cors");
 
+const rateLimit = require("express-rate-limit");
+
 const app = express();
 
 
-app.set('trust proxy', true);
+
+// Trust the proxy if your app is behind one (e.g., Nginx, Heroku)
+app.set("trust proxy", 1);
 
 app.use(express.json());
 app.use(cors());
@@ -17,6 +21,26 @@ app.use(cors());
 app.get("/", (req, res) => {
     return res.status(200).send({ message: "welcome to ecommerce api - node", status: true });
 });
+
+
+const limiter = rateLimit({
+    windowMs: 5 * 60 * 1000, // 5 minutes
+    limit: 2, // each IP can make up to 10 requests per `windowsMs` (5 minutes)
+    standardHeaders: true, // add the `RateLimit-*` headers to the response
+    legacyHeaders: false, // remove the `X-RateLimit-*` headers from the response
+  });
+  
+
+// Apply the rate limiter only to the /auth/request-otp route
+app.use("/auth/request-otp", limiter);
+
+// Log the incoming request IP for debugging
+app.use((req, res, next) => {
+    console.log("Request IP:", req.ip); // or req.headers['x-forwarded-for']
+    next();
+});
+
+
 
 const authRouters = require("./routes/auth.route.js");
 app.use("/auth", authRouters);
