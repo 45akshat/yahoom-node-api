@@ -51,7 +51,7 @@ router.post('/get-updates', async (req, res) => {
     
     // order_placed_2
 
-    if(req.body.shipment_status == 'Delivered'){
+    if(req.body.shipment_status == 'DELIVERED'){
         await sendTemplateMessage(order.shippingAddress.mobile, 'order_arrived_3', 'order_arrived_3', parameters);
     }
 
