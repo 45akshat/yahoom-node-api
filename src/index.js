@@ -8,6 +8,9 @@ const cors = require("cors");
 
 const app = express();
 
+
+// Enable trust proxy to correctly identify client IP
+app.set('trust proxy', true);
 app.use(express.json());
 app.use(cors());
 
