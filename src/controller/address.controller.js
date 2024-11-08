@@ -48,9 +48,21 @@ const getAddressById = async (req, res) => {
 // Get all addresses for a user by their user ID
 const getAddressesByUserId = async (req, res) => {
     try {
+        
+        const jwt = req.headers.authorization?.split(" ")[1];
+
+        if (!jwt) {
+            return res.status(404).send({ error: "token not found" });
+        }
+
+        const user = await userService.getUserProfileByToken(jwt);
+
         const { userId } = req.params;
-        const addresses = await addressService.getAddressesByUserId(userId);
-        return res.status(200).json(addresses);
+        if(userId == user._id){
+            const addresses = await addressService.getAddressesByUserId(userId);
+            return res.status(200).json(addresses);
+        }
+
     } catch (error) {
         return res.status(500).json({ error: error.message });
     }

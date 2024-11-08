@@ -14,9 +14,21 @@ const createOrder = async (req, res) => {
 // Get all orders for a user
 const getUserOrders = async (req, res) => {
     try {
+        const jwt = req.headers.authorization?.split(" ")[1];
+
+        if (!jwt) {
+            return res.status(404).send({ error: "token not found" });
+        }
+
+        const user = await userService.getUserProfileByToken(jwt);
+
+        const { userId } = req.params;
+        if(userId == user._id){
+
         const {userId} = req.params; // Assuming user ID is stored in req.user
         const orders = await orderService.getOrdersByUserId(userId);
         return res.status(200).send(orders);
+        }
     } catch (error) {
         return res.status(500).send({ error: error.message });
     }
