@@ -35,7 +35,7 @@ const limiter = rateLimit({
 
 // Apply the rate limiter only to the /auth/request-otp route
 app.use("/auth/request-otp", limiter);
-app.use("/auth/login", limiter2);
+app.use("/auth/signin", limiter2);
 
 // Log the incoming request IP for debugging
 app.use((req, res, next) => {
