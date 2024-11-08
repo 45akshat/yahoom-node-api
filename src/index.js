@@ -25,12 +25,17 @@ app.get("/", (req, res) => {
 
 const limiter = rateLimit({
     windowMs: 5 * 60 * 1000, // 5 minutes
-    limit: 2, // each IP can make up to 10 requests per `windowsMs` (5 minutes)
+    limit: 5, // each IP can make up to 10 requests per `windowsMs` (5 minutes)
   });
+  const limiter2 = rateLimit({
+      windowMs: 5 * 60 * 1000, // 5 minutes
+      limit: 5, // each IP can make up to 10 requests per `windowsMs` (5 minutes)
+    });
   
 
 // Apply the rate limiter only to the /auth/request-otp route
 app.use("/auth/request-otp", limiter);
+app.use("/auth/login", limiter2);
 
 // Log the incoming request IP for debugging
 app.use((req, res, next) => {
