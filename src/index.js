@@ -9,8 +9,10 @@ const cors = require("cors");
 const app = express();
 
 
+
 // Enable trust proxy to correctly identify client IP
-app.set('trust proxy', true);
+app.set('trust proxy', 1); // Trust the first proxy in the chain
+
 app.use(express.json());
 app.use(cors());
 

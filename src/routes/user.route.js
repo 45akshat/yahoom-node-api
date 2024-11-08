@@ -14,6 +14,15 @@ const otpRequestLimiter = rateLimit({
     }
 });
 
+
+
+// Diagnostic middleware to log IPs
+router.use((req, res, next) => {
+    console.log("Client IP:", req.ip); // Log the client IP to the console
+    next();
+});
+
+
 // Routes
 router.post("/signup", authController.register);
 router.post("/signin", authController.login);
