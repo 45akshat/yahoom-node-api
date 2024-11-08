@@ -40,7 +40,6 @@ router.post("/createOrder", async (req, res) => {
           amount, // Amount in paise
           currency,
           receipt,
-          offers: ["offer_PHxDNFUy0hDWo3"] // Example offer (customize as needed)
       };
 
       // Create the Razorpay order
