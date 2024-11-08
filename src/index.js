@@ -43,7 +43,11 @@ app.use((req, res, next) => {
     next();
 });
 
-
+app.use((req, res, next) => {
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    next();
+  })
+  
 
 const authRouters = require("./routes/auth.route.js");
 app.use("/auth", authRouters);
