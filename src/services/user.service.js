@@ -52,7 +52,10 @@ const sendOtp = async (email, password) => {
         }
         // Update the user's password
         user.password = password;
-
+        // user.otp_request_count = password;
+        // user.last_request_timestamp = password;
+        // user.failed_attempts = "";
+        // user.last_failed_attempt = "";
         // Save the updated user
         await user.save();
 
